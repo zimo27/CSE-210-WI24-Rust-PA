@@ -109,6 +109,7 @@ Then, implement the missing functions in __`beach.rs`__:
     - The new `Crab` should have its diet selected randomly using the provided `Diet::random_diet`.
     - The new `Crab` should have its color computed by `Color::cross` from before.
     - The new `Crab` should have a speed of `1` (babies go slowly).
+  - `find_crabs_by_name`: returns a vector of references to crabs with the given name.
 
 The tests for these functions are:
   - `part1_beach_add_get_crab`
@@ -118,12 +119,7 @@ The tests for these functions are:
   - `part1_beach_fastest_fastest_first`
   - `part1_beach_fastest_fastest_second`
   - `part1_crab_breeding`
-
-Lastly, implement the remaining method in __`crab.rs`__:
-
-  - `find_crabs_by_name`: returns a vector of references to crabs with the given name.
-
-When you're done, the test `part1_crab_find_by_name` should pass.
+  - `part1_crab_find_by_name`
 
 ## Notes
 
