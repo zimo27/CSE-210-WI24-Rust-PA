@@ -234,7 +234,7 @@ First, in __`ocean.rs`__, add appropriate struct fields to back the `beaches` an
 You should now have the following tests passing:
 
  - `part2_ocean_generate_algae_only`
- - `part2_ocean_generate_bountiful`
+ - `part2_ocean_generate_algae_bountiful`
  
  # Submitting your Work
 
