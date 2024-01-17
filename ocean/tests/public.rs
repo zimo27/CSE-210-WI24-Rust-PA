@@ -20,10 +20,10 @@ use std::rc::Rc;
 
 static PRINZ: &str = "Prinz";
 static SEBASTIAN: &str = "Sebastian";
-static CRAB_1: &str = "Nyx";
-static CRAB_2: &str = "Edward";
-static CRAB_3: &str = "Diego";
-static CRAB_4: &str = "Leo";
+static CRAB_1: &str = "Edward";
+static CRAB_2: &str = "Mira";
+static CRAB_3: &str = "Hermione";
+static CRAB_4: &str = "Luna";
 static CRAB_5: &str = "Cancer";
 static CLAN_1: &str = "Pincher Patrol";
 static CLAN_2: &str = "Reef Raiders";
