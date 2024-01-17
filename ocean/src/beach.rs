@@ -1,6 +1,7 @@
 use crate::color::Color;
 use crate::crab::Crab;
 use crate::diet::Diet;
+use crate::clans::ClanSystem;
 use std::slice::Iter;
 
 #[derive(Debug)]
@@ -61,6 +62,29 @@ impl Beach {
      * the method should panic.
      */
     pub fn breed_crabs(&mut self, i: usize, j: usize, name: String) {
+        unimplemented!();
+    }
+
+    /**
+     * Returns a reference to the clan system associated with the beach.
+     */
+    pub fn get_clan_system(&self) -> &ClanSystem {
+        unimplemented!();
+    }
+
+    /**
+     * Adds a crab that lives on the beach as a member to the clan system for the given clan id and the crab's name.
+     * A crab can only belong to one clan.
+     */
+    pub fn add_member_to_clan(&mut self, clan_id: &str, crab_name: &str) {
+        unimplemented!();
+    }
+
+    /**
+     * Returns the id of the clan that wins the competition given two clan ids. The winner is decided based on the average speed of the clan members.
+     * Return `None` if there are no clear winners between two different existing clans. If the inputs are invalid, return an Err string.
+     */
+    pub fn get_winner_clan(&self, id1: &str, id2: &str) -> Result<Option<String>, String> {
         unimplemented!();
     }
 }

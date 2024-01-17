@@ -7,3 +7,4 @@ pub mod ocean;
 pub mod prey;
 pub mod rand;
 pub mod reef;
+pub mod clans;
