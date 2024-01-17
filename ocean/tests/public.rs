@@ -20,6 +20,14 @@ use std::rc::Rc;
 
 static PRINZ: &str = "Prinz";
 static SEBASTIAN: &str = "Sebastian";
+static CRAB_1: &str = "Edward";
+static CRAB_2: &str = "Mira";
+static CRAB_3: &str = "Hermione";
+static CRAB_4: &str = "Luna";
+static CRAB_5: &str = "Cancer";
+static CLAN_1: &str = "Pincher Patrol";
+static CLAN_2: &str = "Reef Raiders";
+static CLAN_3: &str = "Shell Shockers";
 
 // https://en.wikipedia.org/wiki/The_Golden_Crab
 fn new_prinz() -> Crab {
@@ -37,6 +45,15 @@ fn new_sebastian() -> Crab {
         String::from(SEBASTIAN),
         30, // faster than Prinz!
         Color::new_red(),
+        Diet::Plants,
+    )
+}
+
+fn new_crab(name: &str, speed: u32) -> Crab {
+    Crab::new(
+        String::from(name),
+        speed,
+        Color::new_blue(),
         Diet::Plants,
     )
 }
@@ -378,4 +395,168 @@ fn part2_ocean_generate_algae_bountiful() {
         sebastian.discover_reef(Rc::clone(&reef));
         assert_eq!(sebastian.hunt(), true);
     }
+}
+
+#[test]
+fn part3_clans_get_clan_member_names_zero() {
+    let beach = Beach::new();
+    let clan_system = beach.get_clan_system();
+    let names = clan_system.get_clan_member_names(CLAN_1);
+    assert_eq!(names.len(), 0);
+}
+
+#[test]
+fn part3_clans_get_clan_member_names() {
+    let mut beach = Beach::new();
+    let crab1 = new_crab(CRAB_1, 25);
+    beach.add_crab(crab1);
+    beach.add_member_to_clan(CLAN_1, CRAB_1);
+    let clan_system = beach.get_clan_system();
+    let names = clan_system.get_clan_member_names(CLAN_1);
+    assert_eq!(names.len(), 1);
+    assert_eq!(names[0], CRAB_1);
+}
+
+#[test]
+fn part3_clans_get_clan_member_count_first() {
+    let mut beach = Beach::new();
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_clan_member_count(CLAN_1), 0);
+    let crab1 = new_crab(CRAB_1, 25);
+    beach.add_crab(crab1);
+    beach.add_member_to_clan(CLAN_1, CRAB_1);
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_clan_member_count(CLAN_1), 1);
+}
+
+#[test]
+fn part3_clans_get_clan_member_count_all() {
+    let mut beach = Beach::new();
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_clan_member_count(CLAN_1), 0);
+    let crab1 = new_crab(CRAB_1, 25);
+    let crab3 = new_crab(CRAB_3, 25);
+    let crab4 = new_crab(CRAB_4, 25);
+    beach.add_crab(crab1);
+    beach.add_crab(crab3);
+    beach.add_crab(crab4);
+    beach.add_member_to_clan(CLAN_1, CRAB_1);
+    beach.add_member_to_clan(CLAN_2, CRAB_3);
+    beach.add_member_to_clan(CLAN_2, CRAB_4);
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_clan_member_count(CLAN_1), 1);
+    assert_eq!(clan_system.get_clan_member_count(CLAN_2), 2);
+}
+
+#[test]
+fn part3_clans_get_clan_count_zero() {
+    let beach = Beach::new();
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_clan_count(), 0);
+}
+
+#[test]
+fn part3_clans_get_clan_count_all() {
+    let mut beach = Beach::new();
+    let crab1 = new_crab(CRAB_1, 25);
+    let crab3 = new_crab(CRAB_3, 25);
+    beach.add_crab(crab1);
+    beach.add_crab(crab3);
+    beach.add_member_to_clan(CLAN_1, CRAB_1);
+    beach.add_member_to_clan(CLAN_2, CRAB_3);
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_clan_count(), 2);
+}
+
+#[test]
+fn part3_clans_get_largest_clan_id_empty_beach() {
+    let beach = Beach::new();
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_largest_clan_id(), None);
+}
+
+#[test]
+fn part3_clans_get_largest_clan_id_first() {
+    let mut beach = Beach::new();
+    let crab1 = new_crab(CRAB_1, 25);
+    let crab2 = new_crab(CRAB_2, 25);
+    let crab3 = new_crab(CRAB_3, 25);
+    beach.add_crab(crab1);
+    beach.add_member_to_clan(CLAN_1, CRAB_1);
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_largest_clan_id(), Some(CLAN_1.to_string()));
+    beach.add_crab(crab2);
+    beach.add_member_to_clan(CLAN_1, CRAB_2);
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_largest_clan_id(), Some(CLAN_1.to_string()));
+    beach.add_crab(crab3);
+    beach.add_member_to_clan(CLAN_2, CRAB_3);
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_largest_clan_id(), Some(CLAN_1.to_string()));
+}
+
+#[test]
+fn part3_clans_get_largest_clan_id_second() {
+    let mut beach = Beach::new();
+    let crab1 = new_crab(CRAB_1, 25);
+    let crab3 = new_crab(CRAB_3, 25);
+    let crab4 = new_crab(CRAB_4, 25);
+    beach.add_crab(crab1);
+    beach.add_member_to_clan(CLAN_1, CRAB_1);
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_largest_clan_id(), Some(CLAN_1.to_string()));
+    beach.add_crab(crab3);
+    beach.add_crab(crab4);
+    beach.add_member_to_clan(CLAN_2, CRAB_3);
+    beach.add_member_to_clan(CLAN_2, CRAB_4);
+    let clan_system = beach.get_clan_system();
+    assert_eq!(clan_system.get_largest_clan_id(), Some(CLAN_2.to_string()));
+}
+
+#[test]
+fn part3_beach_get_winner_clan_empty_beach() {
+    let beach = Beach::new();
+    assert!(beach.get_winner_clan(CLAN_1, CLAN_2).is_err())
+}
+
+#[test]
+fn part3_beach_get_winner_clan_tie() {
+    let mut beach = Beach::new();
+    let crab1 = new_crab(CRAB_1, 25);
+    let crab2 = new_crab(CRAB_2, 25);
+    let crab3 = new_crab(CRAB_3, 22);
+    let crab4 = new_crab(CRAB_4, 28);
+    beach.add_crab (crab1);
+    beach.add_crab (crab2);
+    beach.add_crab (crab3);
+    beach.add_crab (crab4);
+    beach.add_member_to_clan(CLAN_1, CRAB_1);
+    beach.add_member_to_clan(CLAN_1, CRAB_2);
+    beach.add_member_to_clan(CLAN_2, CRAB_3);
+    beach.add_member_to_clan(CLAN_2, CRAB_4);
+    assert_eq!(beach.get_winner_clan(CLAN_1, CLAN_2), Ok(None));
+}
+
+
+#[test]
+fn part3_beach_get_winner_clan() {
+    let mut beach = Beach::new();
+    let crab1 = new_crab(CRAB_1, 24);
+    let crab2 = new_crab(CRAB_2, 28);
+    let crab3 = new_crab(CRAB_3, 30);
+    let crab4 = new_crab(CRAB_4, 3);
+    let crab5 = new_crab(CRAB_5, 30);
+    beach.add_crab (crab1);
+    beach.add_crab (crab2);
+    beach.add_crab (crab3);
+    beach.add_crab (crab4);
+    beach.add_crab (crab5);
+    beach.add_member_to_clan(CLAN_1, CRAB_1);
+    beach.add_member_to_clan(CLAN_1, CRAB_2);
+    beach.add_member_to_clan(CLAN_2, CRAB_3);
+    beach.add_member_to_clan(CLAN_2, CRAB_4);
+    beach.add_member_to_clan(CLAN_3, CRAB_5);
+    assert_eq!(beach.get_winner_clan(CLAN_1, CLAN_2), Ok(Some(CLAN_1.to_string())));
+    assert_eq!(beach.get_winner_clan(CLAN_2, CLAN_3), Ok(Some(CLAN_3.to_string())));
+    assert_eq!(beach.get_winner_clan(CLAN_1, CLAN_3), Ok(Some(CLAN_3.to_string())));
 }

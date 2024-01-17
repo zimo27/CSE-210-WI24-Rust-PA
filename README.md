@@ -231,6 +231,39 @@ You should now have the following tests passing:
 
  - `part2_ocean_generate_algae_only`
  - `part2_ocean_generate_algae_bountiful`
+
+ ### Clan Competitions
+
+The crabs in King Triton's Ocean like to socialize by forming different clans and competing among themselves. Using the clan system, the crabs can join a clan and engage in the competition. Multiple crabs can belong to the same clan, but a crab cannot join more than one clan. Every beach has a clan system in place.
+
+Your task is to extend the existing model for beaches and clans. Note: Every clan has a unique clan `id`, and for the purposes of this task, every crab will have a unique name.
+
+In __`clans.rs`__ , add appropriate fields, add a `new` method, and complete the following methods with the given signatures:
+  - `get_clan_member_names`: returns a list of the member names for the given clan `id`.
+  - `get_clan_count`: returns the number of clans currently in existence.
+  - `get_clan_member_count`: returns the number of members for the given clan `id`.
+  - `get_largest_clan_id`: returns the `id` of the clan with the most number of crabs, or `None` if such a clan does not exist.
+
+
+In __`beach.rs`__, add a field for the `ClanSystem`, update existing methods where necessary and complete the following methods with the given signatures:
+ - `get_clan_system`: returns a reference to the clan system associated with the beach.
+ - `add_member_to_clan`: adds a crab that lives on the beach as a member for the given clan `id` and crab `name`. If a clan with this `id` does not exist, create one. You may define and call a method in __`clans.rs`__ to perform this operation.
+ - `get_winner_clan`: returns the `id` of the clan that wins the competition given two clan ids and returns a `Result` type. The winner is decided based on the average speed of the clan members. Return `None` if there are no clear winners between two different existing clans. If the inputs are invalid, return an `Err` string.
+
+You should now have the following tests passing:
+
+  - `part3_clans_get_clan_member_names_zero`
+  - `part3_clans_get_clan_member_names`
+  - `part3_clans_get_clan_member_count_first`
+  - `part3_clans_get_clan_member_count_all`
+  - `part3_clans_get_clan_count_zero`
+  - `part3_clans_get_clan_count_all`
+  - `part3_clans_get_largest_clan_id_empty_beach`
+  - `part3_clans_get_largest_clan_id_first`
+  - `part3_clans_get_largest_clan_id_second`
+  - `part3_beach_get_winner_clan_empty_beach`
+  - `part3_beach_get_winner_clan_tie`
+  - `part3_beach_get_winner_clan`
  
  # Submitting your Work
 
