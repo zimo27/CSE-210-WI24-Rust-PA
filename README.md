@@ -277,3 +277,4 @@ You should now have the following tests passing:
   - __`crab.rs`__
   - __`ocean.rs`__
   - __`reef.rs`__
+  - __`clans.rs`__
