@@ -95,7 +95,7 @@ You should now have the following tests passing:
   - `part1_color_cross_no_panic`
   - `part1_crab_new`
 
-### Crabs & Braches
+### Crabs & Beaches
 
 Then, implement the missing functions in __`beach.rs`__:
 
