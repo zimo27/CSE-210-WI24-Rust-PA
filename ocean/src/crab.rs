@@ -1,36 +1,55 @@
 use crate::color::Color;
 use crate::cookbook::{Cookbook, Recipe};
-use crate::diet::Diet;
+use crate::diet::{Diet, self};
 use crate::prey::Prey;
 use crate::reef::Reef;
 use std::cell::RefCell;
 use std::rc::Rc;
+use std::vec;
 
 #[derive(Debug)]
 pub struct Crab {
     // TODO: Add fields here (some in part 1, some in part 2)
+    name: String,
+    speed: u32,
+    color:  Color,
+    diet: Diet,
+    reefs: Vec<Rc<RefCell<Reef>>>
+
 }
 
 // Do NOT implement Copy for Crab.
 impl Crab {
     pub fn new(name: String, speed: u32, color: Color, diet: Diet) -> Crab {
-        unimplemented!();
+        //unimplemented!();
+        Crab {
+            name : name,
+            speed : speed,
+            color : color,
+            diet : diet,
+            reefs: Vec::new()
+        }
     }
 
     pub fn name(&self) -> &str {
-        unimplemented!();
+        //unimplemented!();
+        &self.name
     }
 
     pub fn speed(&self) -> u32 {
-        unimplemented!();
+        //unimplemented!();
+        self.speed
     }
 
     pub fn color(&self) -> &Color {
-        unimplemented!();
+        //unimplemented!();
+        &self.color
     }
 
     pub fn diet(&self) -> Diet {
-        unimplemented!();
+        //unimplemented!();
+        // why Diet need no &???
+        self.diet
     }
 
     // PART 2 BELOW
@@ -40,7 +59,8 @@ impl Crab {
      * Have this crab discover a new reef, adding it to its list of reefs.
      */
     pub fn discover_reef(&mut self, reef: Rc<RefCell<Reef>>) {
-        unimplemented!();
+        //unimplemented!();
+        self.reefs.push(reef);
     }
 
     /**
@@ -53,14 +73,32 @@ impl Crab {
      * If all reefs are empty, or this crab has no reefs, return None.
      */
     fn catch_prey(&mut self) -> Option<(Box<dyn Prey>, usize)> {
-        unimplemented!();
+        //unimplemented!();
+        if self.reefs.len() == 0 {
+            return None;
+        }
+        let mut index:usize = 0;
+        for re in self.reefs.iter() {
+            let mut r = re.borrow_mut();
+            if r.population() == 0 {
+                continue;
+            } else {
+                return Some((r.take_prey().unwrap(),index))
+            }
+            index+=1;
+        
+        }
+
+        None
     }
 
     /**
      * Releases the given prey back into the reef at the given index.
      */
     fn release_prey(&mut self, prey: Box<dyn Prey>, reef_index: usize) {
-        unimplemented!();
+        //unimplemented!();
+        let mut r = self.reefs[reef_index].borrow_mut();
+        r.add_prey(prey);
     }
 
     /**
@@ -100,7 +138,42 @@ impl Crab {
      * Note: this pseudocode reads like a terrible poem.
      */
     pub fn hunt(&mut self) -> bool {
-        unimplemented!();
+        //unimplemented!();
+        if self.reefs.len() == 0 {
+            return false;
+        }
+        let mut escaped:Vec<(Box<dyn Prey>, usize)> = Vec::new();
+        let mut catched_prey:Option<(Box<dyn Prey>, usize)> = self.catch_prey();
+        let mut success:u8 = 0;
+        while !catched_prey.is_none() {
+            let mut preyy:(Box<dyn Prey>, usize) = catched_prey.unwrap();
+            // if run away
+            if preyy.0.try_escape(&self) {
+                escaped.push(preyy);
+            // if not edible
+            } else if preyy.0.diet() != self.diet() {
+                escaped.push(preyy);
+            // if caught the prey
+            } else {
+                //return true;
+                success = 1;
+            }
+            catched_prey = self.catch_prey();
+        }
+        for da_prey in escaped.drain(..) {
+            self.release_prey(da_prey.0, da_prey.1)
+        }
+        // return all escaped preys
+        if success==1 {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+
+    pub fn breed(&self, crab_b:&Crab, name:String) -> Crab{ 
+        Crab { name: (name), speed: (1), color: (Color::cross(self.color(),crab_b.color())), diet: (Diet::random_diet()) , reefs:Vec::new()}
     }
 
     /**
@@ -111,7 +184,14 @@ impl Crab {
      * up to you to figure out which ones and where. Do not make any other changes
      * to the signature.
      */
-    pub fn choose_recipe(&self, cookbook: &Cookbook) -> Option<&Recipe> {
-        unimplemented!();
+    // lifetime is needed so returned recipe does not outlive cookbook
+    pub fn choose_recipe<'a>(&self, cookbook: & 'a Cookbook) -> Option<&'a Recipe> {
+        //unimplemented!();
+        for rec in cookbook.recipes() {
+            if rec.diet() == self.diet() {
+                return Some(rec);
+            } 
+        }
+        None
     }
 }
