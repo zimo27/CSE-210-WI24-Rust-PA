@@ -26,7 +26,7 @@ impl Color {
      * Returns a new `Color` whose components are the sum of `c1` and `c2`'s components, modulo 256.
      *
      * First, try writing this function the "obvious" way with arithmetic operations. The test for
-     * this method (which you can run with `cargo test part1_color` will fail) with a panic.
+     * this method (which you can run with `cargo test part1_color`) will fail with a panic.
      *
      * Note which line of the test is causing the panic: why not the other?
      *
@@ -34,6 +34,8 @@ impl Color {
      * https://doc.rust-lang.org/std/primitive.u8.html
      */
     pub fn cross(c1: &Color, c2: &Color) -> Color {
-        unimplemented!();
+        //unimplemented!();
+        
+        Color { r: (c1.r.wrapping_add(c2.r) ), g: (c1.g.wrapping_add(c2.g) ), b: (c1.b.wrapping_add(c2.b)) }
     }
 }
