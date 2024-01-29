@@ -7,7 +7,6 @@ use std::slice::Iter;
 #[derive(Debug)]
 pub struct Beach {
     // TODO: Declare the fields of the Beach struct here.
-    pub size:usize,
     pub crabs: Vec<Crab>,
     // need a data structure to contain the crabs
     pub clans: ClanSystem,
@@ -19,7 +18,6 @@ impl Beach {
 
         // not sure if the declaration of crabs makes it mutable, I think not
         Beach { 
-            size: (0) ,
             crabs: (Vec::new()),
             clans: (ClanSystem::new()),
         }
@@ -29,7 +27,7 @@ impl Beach {
      * Returns the number of crabs on the beach.
      */
     pub fn size(&self) -> usize {
-        self.size
+        self.crabs.len()
     }
 
     /**
@@ -40,18 +38,14 @@ impl Beach {
      *     - The newly added crab should be at the END of the collection.
      */
     pub fn add_crab(&mut self, crab: Crab) {
-        //unimplemented!();
         self.crabs.push(crab);
-        self.size+=1;
     }
 
     pub fn get_crab(&self, index: usize) -> &Crab {
-        //unimplemented!();
         &self.crabs[index]
     }
 
     pub fn crabs(&self) -> Iter<Crab> {
-        //unimplemented!();
         self.crabs.iter()
 
     }
@@ -102,7 +96,6 @@ impl Beach {
     pub fn breed_crabs(&mut self, i: usize, j: usize, name: String) {
         //unimplemented!();
         self.crabs.push(Crab::breed(self.get_crab(i), self.get_crab(j), name));
-        self.size+=1;
     }
 
     /**
@@ -128,23 +121,23 @@ impl Beach {
      */
     pub fn get_winner_clan(&self, id1: &str, id2: &str) -> Result<Option<String>, String> {
         //unimplemented!();
-        if !self.clans.clan_exist(id1) || !self.clans.clan_exist(id2) {
+        if self.clans.get_clan_member_names(id1).is_empty() || self.clans.get_clan_member_names(id2).is_empty()  {
             return Err("Invalid input for get_winner_clan".to_string());
         }
 
         // get clan menber names from clan methods, then get speed from self.crabs, then average them
          
         let mut count1:u32 = 0;
-        let mut sum1:u32 = 0;
+        let mut speedSum1:u32 = 0;
         let mut count2:u32 = 0;
-        let mut sum2:u32 = 0;
+        let mut speedSum2:u32 = 0;
         for crab in self.crabs.iter() {
             if self.clans.get_clan_member_names(id1).contains(&crab.name().to_string()) {
                 count1+=1;
-                sum1+=crab.speed();
+                speedSum1+=crab.speed();
             } else if self.clans.get_clan_member_names(id2).contains(&crab.name().to_string()) {
                 count2+=1;
-                sum2+=crab.speed();
+                speedSum2+=crab.speed();
             }
         }
         
@@ -152,10 +145,10 @@ impl Beach {
         let mut speed1:u32 = 0;
         let mut speed2:u32 = 0;
         if count1>0 {
-            speed1 = sum1/count1;
+            speed1 = speedSum1/count1;
         }
         if count2>0 {
-            speed2 = sum2/count2;
+            speed2 = speedSum2/count2;
         }
 
         if  speed1 == speed2  {
